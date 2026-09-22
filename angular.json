@@ -64,9 +64,7 @@
             }
           },
           "defaultConfiguration": "development",
-          "options": {
-            "port": 6767
-          }
+          "options": {"port": 6767}
         },
         "test": {
           "builder": "@angular/build:unit-test"
