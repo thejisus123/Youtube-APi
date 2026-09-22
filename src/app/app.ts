@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import Swal from 'sweetalert2';
 import { Youtube } from './services/youtube';
 
 @Component({
@@ -10,7 +11,6 @@ import { Youtube } from './services/youtube';
   templateUrl: './app.html',
 })
 export class App {
-
   textoBusqueda = '';
   resultados: any[] = [];
 
@@ -24,6 +24,12 @@ export class App {
 
   buscar(): void {
     if (!this.textoBusqueda.trim()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Búsqueda vacía',
+        text: 'Escribe algo para buscar videos.',
+        confirmButtonText: 'Aceptar'
+      });
       return;
     }
 
@@ -36,13 +42,18 @@ export class App {
       error: (error) => {
         console.error('Error al buscar videos:', error);
         this.resultados = [];
+        Swal.fire({
+          icon: 'error',
+          title: 'Ups...',
+          text: 'No se pudieron cargar los videos.',
+          confirmButtonText: 'Aceptar'
+        });
       }
     });
   }
 
   seleccionarVideo(video: any): void {
     this.videoSeleccionado = video;
-
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       'https://www.youtube.com/embed/' +
       video.id.videoId +
@@ -55,4 +66,3 @@ export class App {
     this.videoUrl = null;
   }
 }
-
