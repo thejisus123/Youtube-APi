@@ -63,7 +63,10 @@
               "buildTarget": "youtube-app:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 6767
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"
@@ -72,3 +75,4 @@
     }
   }
 }
+
