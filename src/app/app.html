@@ -5,17 +5,27 @@
 </nav>
 
 <main class="container my-4">
-  <!-- Buscador -->
   <div class="row justify-content-center mb-4">
     <div class="col-12 col-md-8 col-lg-6">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Buscar vídeos...">
-        <button type="button" class="btn btn-primary">Buscar</button>
+        <input
+          #busqueda
+          type="text"
+          class="form-control"
+          placeholder="Buscar vídeos..."
+        >
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="buscar(busqueda)"
+        >
+          Buscar
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Resultados -->
   <section class="row g-3">
     <div class="col-12 text-center text-muted py-5 border rounded">
       Los resultados aparecerán aquí
