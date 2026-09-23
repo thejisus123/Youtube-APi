@@ -42,6 +42,7 @@ export class App {
       error: (error) => {
         console.error('Error al buscar videos:', error);
         this.resultados = [];
+
         Swal.fire({
           icon: 'error',
           title: 'Ups...',
@@ -54,11 +55,19 @@ export class App {
 
   seleccionarVideo(video: any): void {
     this.videoSeleccionado = video;
+
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       'https://www.youtube.com/embed/' +
       video.id.videoId +
       '?autoplay=1'
     );
+
+    setTimeout(() => {
+      document.getElementById('reproductor')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 100);
   }
 
   cerrarVideo(): void {
