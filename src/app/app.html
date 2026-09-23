@@ -1,91 +1,216 @@
-<nav class="navbar bg-light border-bottom">
+<nav class="navbar bg-dark border-bottom shadow-sm">
   <div class="container">
-    <span class="navbar-brand fw-bold">ScrompyTube</span>
+    <span class="navbar-brand text-white fw-bold fs-4">
+      ScrompyTube
+    </span>
+
+    <span class="text-white-50">
+      YouTube API
+    </span>
   </div>
 </nav>
 
-<main class="container my-4">
-  <div class="row justify-content-center mb-4">
-    <div class="col-12 col-md-8 col-lg-6">
-      <div class="input-group">
-        <input
-          [(ngModel)]="textoBusqueda"
-          type="text"
-          class="form-control"
-          placeholder="Buscar vídeos..."
-          (keyup.enter)="buscar()"
-        >
+<main class="container-fluid bg-secondary-subtle min-vh-100 py-5">
 
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="buscar()"
-        >
-          Buscar
-        </button>
-      </div>
+  <div class="container">
+
+    <!-- Encabezado -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold">
+        Encuentra tus videos favoritos
+      </h1>
+
+      <p class="text-muted">
+        Busca videos de YouTube y reprodúcelos directamente desde ScrompyTube.
+      </p>
     </div>
-  </div>
 
-  <section class="row g-3">
-    @for (video of resultados; track $index) {
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100">
-          <img
-            [src]="video.snippet.thumbnails.medium.url"
-            class="card-img-top"
-            [alt]="video.snippet.title"
+    <!-- Buscador -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-12 col-md-9 col-lg-7">
+
+        <div class="input-group input-group-lg shadow-sm">
+
+          <input
+            type="text"
+            class="form-control"
+            placeholder="¿Qué quieres buscar?"
+            [(ngModel)]="textoBusqueda"
+            (keyup.enter)="buscar()"
           >
-
-          <div class="card-body">
-            <h5 class="card-title">
-              {{ video.snippet.title }}
-            </h5>
-
-            <p class="card-text text-muted">
-              {{ video.snippet.channelTitle }}
-            </p>
-
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="seleccionarVideo(video)"
-            >
-              Ver video
-            </button>
-          </div>
-        </div>
-      </div>
-    } @empty {
-      <div class="col-12 text-center text-muted py-5 border rounded">
-        Los resultados aparecerán aquí
-      </div>
-    }
-  </section>
-
-  @if (videoSeleccionado) {
-    <div class="mt-4">
-      <div class="card">
-        <div class="card-body">
-          <h4>{{ videoSeleccionado.snippet.title }}</h4>
-
-          <div class="ratio ratio-16x9">
-            <iframe
-              [src]="videoUrl"
-              title="Video de YouTube"
-              allowfullscreen>
-            </iframe>
-          </div>
 
           <button
             type="button"
-            class="btn btn-secondary mt-3"
-            (click)="cerrarVideo()"
-          >
-            Cerrar video
+            class="btn btn-primary px-4"
+            (click)="buscar()">
+            Buscar
           </button>
+
         </div>
+
+        <div class="text-center mt-2">
+          <small class="text-muted">
+            Presiona Enter para buscar
+          </small>
+        </div>
+
       </div>
     </div>
-  }
+
+    <!-- Reproductor -->
+    @if (videoSeleccionado && videoUrl) {
+
+      <section id="reproductor" class="mb-5">
+
+        <div class="card bg-dark text-white shadow">
+
+          <div class="card-header d-flex justify-content-between align-items-center">
+
+            <strong>
+              Reproduciendo
+            </strong>
+
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              (click)="cerrarVideo()">
+              Cerrar
+            </button>
+
+          </div>
+
+          <div class="ratio ratio-16x9">
+
+            <iframe
+              [src]="videoUrl"
+              [title]="videoSeleccionado.snippet.title"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+
+          </div>
+
+          <div class="card-body">
+
+            <h4 class="card-title fw-bold">
+              {{ videoSeleccionado.snippet.title }}
+            </h4>
+
+            <p class="card-text text-white-50 mb-0">
+              {{ videoSeleccionado.snippet.channelTitle }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+    }
+
+    <!-- Encabezado de resultados -->
+    @if (resultados.length > 0) {
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+          <h3 class="fw-bold mb-1">
+            Resultados
+          </h3>
+
+          <small class="text-muted">
+            {{ resultados.length }} videos encontrados
+          </small>
+        </div>
+
+        <span class="badge text-bg-dark">
+          {{ textoBusqueda }}
+        </span>
+
+      </div>
+
+    }
+
+    <!-- Resultados -->
+    <section class="row g-4">
+
+      @if (resultados.length === 0) {
+
+        <div class="col-12">
+
+          <div class="bg-light text-center border rounded-3 p-5 shadow-sm">
+
+            <div class="display-4 mb-3">
+              Buscar
+            </div>
+
+            <h4 class="fw-bold">
+              Busca algo para comenzar
+            </h4>
+
+            <p class="text-muted mb-0">
+              Escribe el nombre de un video, canal o tema en el buscador.
+            </p>
+
+          </div>
+
+        </div>
+
+      }
+
+      @for (video of resultados; track video.id.videoId) {
+
+        <div class="col-12 col-md-6 col-xl-4">
+
+          <div class="card h-100 bg-dark text-white shadow">
+
+            <!-- Miniatura -->
+            <button
+              type="button"
+              class="btn p-0 border-0"
+              (click)="seleccionarVideo(video)">
+
+              <img
+                [src]="video.snippet.thumbnails.high.url"
+                [alt]="video.snippet.title"
+                class="card-img-top"
+              >
+
+            </button>
+
+            <!-- Información -->
+            <div class="card-body d-flex flex-column">
+
+              <h5 class="card-title fw-bold">
+                {{ video.snippet.title }}
+              </h5>
+
+              <p class="card-text text-white-50">
+                {{ video.snippet.channelTitle }}
+              </p>
+
+              <button
+                type="button"
+                class="btn btn-primary mt-auto"
+                (click)="seleccionarVideo(video)">
+                Ver video
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+
+    </section>
+
+  </div>
+
 </main>
+
+<footer class="bg-dark text-white-50 text-center py-4">
+  <small>
+    ScrompyTube · Proyecto académico · YouTube Data API
+  </small>
+</footer>
