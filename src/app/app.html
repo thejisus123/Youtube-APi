@@ -5,87 +5,87 @@
 </nav>
 
 <main class="container my-4">
-
-  <!-- Buscador -->
   <div class="row justify-content-center mb-4">
     <div class="col-12 col-md-8 col-lg-6">
       <div class="input-group">
         <input
+          [(ngModel)]="textoBusqueda"
           type="text"
           class="form-control"
           placeholder="Buscar vídeos..."
-          [(ngModel)]="textoBusqueda"
           (keyup.enter)="buscar()"
         >
+
         <button
           type="button"
           class="btn btn-primary"
-          (click)="buscar()">
+          (click)="buscar()"
+        >
           Buscar
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Reproductor grande -->
-  @if (videoSeleccionado && videoUrl) {
-    <section class="mb-4">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <strong>Reproduciendo</strong>
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-sm"
-            (click)="cerrarVideo()">
-            Cerrar
-          </button>
-        </div>
+  <section class="row g-3">
+    @for (video of resultados; track $index) {
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          <img
+            [src]="video.snippet.thumbnails.medium.url"
+            class="card-img-top"
+            [alt]="video.snippet.title"
+          >
 
-        <div class="ratio ratio-16x9">
-          <iframe
-            [src]="videoUrl"
-            [title]="videoSeleccionado.snippet.title"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-          </iframe>
-        </div>
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ video.snippet.title }}
+            </h5>
 
-        <div class="card-body">
-          <h4 class="card-title">{{ videoSeleccionado.snippet.title }}</h4>
-          <p class="card-text text-muted">{{ videoSeleccionado.snippet.channelTitle }}</p>
+            <p class="card-text text-muted">
+              {{ video.snippet.channelTitle }}
+            </p>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="seleccionarVideo(video)"
+            >
+              Ver video
+            </button>
+          </div>
         </div>
       </div>
-    </section>
-  }
-
-  <!-- Resultados -->
-  <section class="row g-3">
-    @if (resultados.length === 0) {
+    } @empty {
       <div class="col-12 text-center text-muted py-5 border rounded">
         Los resultados aparecerán aquí
       </div>
     }
-
-    @for (video of resultados; track video.id.videoId) {
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100">
-          <button
-            type="button"
-            class="btn p-0 border-0"
-            (click)="seleccionarVideo(video)">
-            <img
-              [src]="video.snippet.thumbnails.medium.url"
-              [alt]="video.snippet.title"
-              class="card-img-top">
-          </button>
-
-          <div class="card-body">
-            <h5 class="card-title">{{ video.snippet.title }}</h5>
-            <p class="card-text text-muted">{{ video.snippet.channelTitle }}</p>
-          </div>
-        </div>
-      </div>
-    }
   </section>
 
+  @if (videoSeleccionado) {
+    <div class="mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4>{{ videoSeleccionado.snippet.title }}</h4>
+
+          <div class="ratio ratio-16x9">
+            <iframe
+              [src]="videoUrl"
+              title="Video de YouTube"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-secondary mt-3"
+            (click)="cerrarVideo()"
+          >
+            Cerrar video
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </main>
