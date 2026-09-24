@@ -12,12 +12,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Crear environment.ts
-        env:
-          ENVIRONMENT_TS: ${{ secrets.ENVIRONMENT_TS }}
-        run: |
-          mkdir -p src/environments
-          printf '%s\n' "$ENVIRONMENT_TS" > src/environments/environment.ts
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
