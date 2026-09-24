@@ -47,5 +47,6 @@ __screenshots__/
 Thumbs.db
 
 # Configuración local de API
-/src/environments/environment.tsfirebase-debug.log
+/src/environments/environment.ts
+firebase-debug.log
 .firebase/
